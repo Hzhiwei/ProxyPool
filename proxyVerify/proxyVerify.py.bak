@@ -1,0 +1,47 @@
+#!/usr/bin/python3
+
+import requests
+from lxml import etree
+
+__author__ = 'Hzhiwei'
+
+PublicNetworkIP = '119.29.28.249'
+
+class proxyVerify(object):
+    def __init__(self):
+        pass
+    
+    def verifyOne(self, proxy):
+        head = {'User-agent': 'Mozilla/5.0'}
+        def verifyHttp(p):
+            proxyArg = {'http':'http://' + str(proxy[0]) + ':' + str(proxy[1])}
+            ip = requests.get('http://icanhazip.com/', headers = head, proxies = proxyArg).text.strip()
+            if ip == PublicNetworkIP:
+                return False
+            else:
+                return True
+        def verifyHttps(p):
+            proxyArg = {'https':'https://' + str(proxy[0]) + ':' + str(proxy[1])} 
+            ip = requests.get('https://icanhazip.com/', headers = head, proxies = proxyArg).text.strip()
+            if ip == PublicNetworkIP:
+                return False
+            else:
+                return True
+        
+        try:
+            if proxy[2].lower() == 'http':
+                return verifyHttp(proxy)
+            elif proxy[2].lower() == 'https':
+                return verifyHttps(proxy)
+            else:
+                return False
+        except:
+            return False
+
+    def verify(self, proxies):
+        pass
+
+if __name__ == "__main__":
+    verify = proxyVerify()
+
+
